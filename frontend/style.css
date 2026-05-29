@@ -1,0 +1,258 @@
+body{
+
+    margin:0;
+
+    padding:20px;
+
+    background:#e0e5ec;
+
+    font-family:Arial;
+
+}
+
+/* MAIN LAYOUT */
+
+.container{
+
+    width:95%;
+
+    max-width:1400px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:320px 1fr;
+
+    gap:20px;
+
+    align-items:start;
+
+}
+
+/* LEFT CARD */
+
+.card{
+
+    background:#e0e5ec;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    box-shadow:
+    10px 10px 20px #bec3c9,
+    -10px -10px 20px #ffffff;
+
+}
+
+/* RIGHT SIDE */
+
+.right-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+/* INPUTS */
+
+input,
+select,
+button{
+
+    width:100%;
+
+    padding:15px;
+
+    margin:10px 0;
+
+    border:none;
+
+    border-radius:15px;
+
+    outline:none;
+
+    box-sizing:border-box;
+
+    font-size:14px;
+
+}
+
+/* INPUT STYLE */
+
+input,
+select{
+
+    background:#e0e5ec;
+
+    box-shadow:
+    inset 5px 5px 10px #bec3c9,
+    inset -5px -5px 10px #ffffff;
+
+}
+
+/* BUTTON */
+
+button{
+
+    cursor:pointer;
+
+    background:#e0e5ec;
+
+    font-weight:bold;
+
+    box-shadow:
+    5px 5px 10px #bec3c9,
+    -5px -5px 10px #ffffff;
+
+    transition:0.2s;
+
+}
+
+button:hover{
+
+    transform:scale(1.02);
+
+}
+
+/* TABLE BOX */
+
+.table-container{
+
+    background:#e0e5ec;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    overflow-x:auto;
+
+    box-shadow:
+    10px 10px 20px #bec3c9,
+    -10px -10px 20px #ffffff;
+
+}
+
+/* TABLE */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+/* HEADER */
+
+th{
+
+    background:#222;
+
+    color:white;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-size:14px;
+
+}
+
+/* CELLS */
+
+td{
+
+    padding:12px;
+
+    text-align:center;
+
+    border-bottom:1px solid #ddd;
+
+    font-size:14px;
+
+    color:#333;
+
+}
+
+/* ROW HOVER */
+
+tr:hover{
+
+    background:#f5f5f5;
+
+}
+
+/* TITLES */
+
+h1,
+h2,
+h3,
+h4{
+
+    text-align:center;
+
+    color:#222;
+
+}
+
+/* LOGO */
+
+.logo{
+
+    width:120px;
+
+    height:120px;
+
+    object-fit:contain;
+
+    display:block;
+
+    margin:0 auto 20px;
+
+}
+
+/* MESSAGE */
+
+#message,
+#staffMessage,
+#scheduleMessage,
+#reportMessage{
+
+    margin-top:10px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+}
+
+/* WEEKLY TABLE */
+
+.weekly-table{
+
+    width:100%;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

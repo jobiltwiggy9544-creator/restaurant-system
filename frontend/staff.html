@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Staff Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+
+<link rel="icon"
+href="image/logo1.png"
+type="image/png">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<img
+src="image/logo.png"
+class="logo"
+alt="Restaurant Logo">
+
+<h1 id="dashboardTitle">
+Staff Dashboard
+</h1>
+
+<h3 id="staffName"></h3>
+
+<p id="message"></p>
+
+<button onclick="checkIn()"
+id="checkInBtn">
+Check In
+</button>
+
+<br><br>
+
+<button onclick="breakIn()"
+id="breakInBtn">
+Break In
+</button>
+
+<br><br>
+
+<button onclick="breakOut()"
+id="breakOutBtn">
+Break Out
+</button>
+
+<br><br>
+
+<button onclick="checkOut()"
+id="checkOutBtn">
+Check Out
+</button>
+
+<br><br>
+
+<button onclick="logout()"
+id="logoutBtn">
+Logout
+</button>
+
+</div>
+
+<!-- WEEKLY SCHEDULE -->
+
+<div class="table-container">
+
+<h2 id="scheduleTitle">
+Weekly Schedule
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th id="staffText">
+Staff
+</th>
+
+<th id="dateText">
+Date
+</th>
+
+<th id="startText">
+Start
+</th>
+
+<th id="endText">
+End
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="weekTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+/* ================= USER ================= */
+
+const user =
+JSON.parse(localStorage.getItem("user"));
+
+const staffId =
+Number(user.id);
+
+document.getElementById(
+"staffName"
+).innerText = user.name;
+
+/* ================= CHECK IN ================= */
+
+async function checkIn(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/checkin",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            staff_id:staffId
+        })
+    }
+    );
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "message"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= BREAK IN ================= */
+
+async function breakIn(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/breakin",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            staff_id:staffId
+        })
+    }
+    );
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "message"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= BREAK OUT ================= */
+
+async function breakOut(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/breakout",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            staff_id:staffId
+        })
+    }
+    );
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "message"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= CHECK OUT ================= */
+
+async function checkOut(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/checkout",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            staff_id:staffId
+        })
+    }
+    );
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "message"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    localStorage.removeItem("user");
+
+    window.location.href =
+    "intex.html";
+
+}
+
+/* ================= WEEK SCHEDULE ================= */
+
+async function loadWeekSchedule(){
+
+    const res =
+    await fetch(
+    `http://localhost:3000/week-schedules?role=staff&staff_id=${user.id}`
+    );
+
+    const data =
+    await res.json();
+
+    let rows = "";
+
+    data.forEach(item => {
+
+        rows += `
+
+        <tr>
+
+        <td>${item.name}</td>
+
+        <td>${item.work_date}</td>
+
+        <td>${item.start_time}</td>
+
+        <td>${item.end_time}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+    document.getElementById(
+    "weekTable"
+    ).innerHTML = rows;
+
+}
+
+loadWeekSchedule();
+
+/* ================= LANGUAGE ================= */
+
+const lang =
+localStorage.getItem("language") || "en";
+
+const translations = {
+
+    en: {
+
+        dashboard:"Staff Dashboard",
+        weekly:"Weekly Schedule",
+        checkIn:"Check In",
+        breakIn:"Break In",
+        breakOut:"Break Out",
+        checkOut:"Check Out",
+        logout:"Logout",
+        staff:"Staff",
+        date:"Date",
+        start:"Start",
+        end:"End"
+
+    },
+
+    jp: {
+
+        dashboard:"スタッフダッシュボード",
+        weekly:"週間スケジュール",
+        checkIn:"出勤",
+        breakIn:"休憩開始",
+        breakOut:"休憩終了",
+        checkOut:"退勤",
+        logout:"ログアウト",
+        staff:"スタッフ",
+        date:"日付",
+        start:"開始",
+        end:"終了"
+
+    }
+
+};
+
+/* ================= APPLY LANGUAGE ================= */
+
+function applyLanguage(){
+
+    const t =
+    translations[lang];
+
+    document.getElementById(
+    "dashboardTitle"
+    ).innerText =
+    t.dashboard;
+
+    document.getElementById(
+    "scheduleTitle"
+    ).innerText =
+    t.weekly;
+
+    document.getElementById(
+    "checkInBtn"
+    ).innerText =
+    t.checkIn;
+
+    document.getElementById(
+    "breakInBtn"
+    ).innerText =
+    t.breakIn;
+
+    document.getElementById(
+    "breakOutBtn"
+    ).innerText =
+    t.breakOut;
+
+    document.getElementById(
+    "checkOutBtn"
+    ).innerText =
+    t.checkOut;
+
+    document.getElementById(
+    "logoutBtn"
+    ).innerText =
+    t.logout;
+
+    document.getElementById(
+    "staffText"
+    ).innerText =
+    t.staff;
+
+    document.getElementById(
+    "dateText"
+    ).innerText =
+    t.date;
+
+    document.getElementById(
+    "startText"
+    ).innerText =
+    t.start;
+
+    document.getElementById(
+    "endText"
+    ).innerText =
+    t.end;
+
+}
+
+applyLanguage();
+
+</script>
+
+</body>
+</html>

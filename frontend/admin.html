@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+
+<link rel="icon"
+href="image/logo1.png"
+type="image/png">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT PANEL -->
+    <div class="card">
+
+        <img src="image/logo.png"
+        class="logo"
+        alt="Restaurant Logo">
+
+        <h2 id="adminName"></h2>
+
+        <h4 id="panelTitle">
+        Admin Panel
+        </h4>
+
+        <!-- ADD STAFF -->
+        <h2 id="addStaffTitle">
+        Add Staff
+        </h2>
+
+        <input
+        type="text"
+        id="staffName"
+        placeholder="Staff Name">
+
+        <input
+        type="password"
+        id="staffPassword"
+        placeholder="Password">
+
+        <select id="staffRole">
+
+            <option value="staff">
+            Staff
+            </option>
+
+            <option value="admin">
+            Admin
+            </option>
+
+        </select>
+
+        <button
+        id="addStaffBtn"
+        onclick="addStaff()">
+        Add Staff
+        </button>
+
+        <p id="staffMessage"></p>
+
+        <!-- CREATE SCHEDULE -->
+        <h2 id="scheduleTitle">
+        Create Schedule
+        </h2>
+
+        <select id="scheduleStaffId"></select>
+
+        <input type="date" id="workDate">
+
+        <label id="startLabel">
+        Start Time
+        </label>
+
+        <input type="time" id="startTime">
+
+        <label id="endLabel">
+        End Time
+        </label>
+
+        <input type="time" id="endTime">
+
+        <button
+        id="scheduleBtn"
+        onclick="addSchedule()">
+        Create Schedule
+        </button>
+
+        <p id="scheduleMessage"></p>
+
+        <!-- PDF REPORT -->
+        <h2 id="pdfTitle">
+        Monthly PDF Report
+        </h2>
+
+        <select id="reportStaff"></select>
+
+        <input
+        type="number"
+        id="reportMonth"
+        placeholder="Month Number">
+
+        <button
+        id="pdfBtn"
+        onclick="downloadReportDirect()">
+        Generate PDF
+        </button>
+
+        <p id="reportMessage"></p>
+
+        <!-- DELETE STAFF -->
+        <h2 id="deleteTitle">
+        Delete Staff
+        </h2>
+
+        <select id="deleteStaff"></select>
+
+        <button
+        id="deleteBtn"
+        onclick="deleteStaff()">
+        Delete Staff
+        </button>
+
+        <p id="deleteMessage"></p>
+
+        <!-- LOGOUT -->
+        <button
+        id="logoutBtn"
+        onclick="logout()">
+        Logout
+        </button>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+        <!-- ATTENDANCE -->
+        <div class="table-container">
+
+            <h2 id="attendanceTitle">
+            Attendance
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th id="staffHead">
+                        Staff
+                        </th>
+
+                        <th id="checkInHead">
+                        Check In
+                        </th>
+
+                        <th id="checkOutHead">
+                        Check Out
+                        </th>
+
+                        <th id="minutesHead">
+                        Total Minutes
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="attendanceTable"></tbody>
+
+            </table>
+
+        </div>
+
+        <!-- MONTHLY HOURS -->
+        <div class="table-container">
+
+            <h2 id="monthlyTitle">
+            Monthly Work Hours
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th id="staffHead2">
+                        Staff
+                        </th>
+
+                        <th id="totalHead">
+                        Total Time
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="monthlyTable"></tbody>
+
+            </table>
+
+        </div>
+
+        <!-- WEEKLY SCHEDULE -->
+        <div class="table-container">
+
+            <h2 id="weeklyTitle">
+            Weekly Schedule
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th id="weekStaff">
+                        Staff
+                        </th>
+
+                        <th id="weekDate">
+                        Date
+                        </th>
+
+                        <th id="weekStart">
+                        Start
+                        </th>
+
+                        <th id="weekEnd">
+                        End
+                        </th>
+
+                        <th id="weekEdit">
+                        Edit
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="weekTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ================= USER ================= */
+
+const user =
+JSON.parse(localStorage.getItem("user"));
+
+/* ================= LANGUAGE ================= */
+
+const lang =
+localStorage.getItem("language") || "en";
+
+/* ================= TRANSLATIONS ================= */
+
+const translations = {
+
+    en: {
+
+        welcome:"Welcome ",
+
+        adminPanel:"Admin Panel",
+
+        addStaff:"Add Staff",
+
+        createSchedule:"Create Schedule",
+
+        attendance:"Attendance",
+
+        monthlyHours:"Monthly Work Hours",
+
+        weeklySchedule:"Weekly Schedule",
+
+        monthlyPdf:"Monthly PDF Report",
+
+        logout:"Logout",
+
+        deleteStaff:"Delete Staff",
+
+        staffName:"Staff Name",
+
+        password:"Password",
+
+        monthNumber:"Month Number",
+
+        startTime:"Start Time",
+
+        endTime:"End Time",
+
+        generatePdf:"Generate PDF",
+
+        staff:"Staff",
+
+        admin:"Admin",
+
+        totalMinutes:"Total Minutes",
+
+        totalTime:"Total Time",
+
+        date:"Date",
+
+        start:"Start",
+
+        end:"End",
+
+        edit:"Edit",
+
+        delete:"Delete",
+
+        checkIn:"Check In",
+
+        checkOut:"Check Out"
+
+    },
+
+    jp: {
+
+        welcome:"ようこそ ",
+
+        adminPanel:"管理パネル",
+
+        addStaff:"スタッフ追加",
+
+        createSchedule:"シフト作成",
+
+        attendance:"出勤記録",
+
+        monthlyHours:"月間勤務時間",
+
+        weeklySchedule:"週間スケジュール",
+
+        monthlyPdf:"月間PDFレポート",
+
+        logout:"ログアウト",
+
+        deleteStaff:"スタッフ削除",
+
+        staffName:"スタッフ名",
+
+        password:"パスワード",
+
+        monthNumber:"月番号",
+
+        startTime:"開始時間",
+
+        endTime:"終了時間",
+
+        generatePdf:"PDF生成",
+
+        staff:"スタッフ",
+
+        admin:"管理者",
+
+        totalMinutes:"合計分",
+
+        totalTime:"合計時間",
+
+        date:"日付",
+
+        start:"開始",
+
+        end:"終了",
+
+        edit:"編集",
+
+        delete:"削除",
+
+        checkIn:"出勤",
+
+        checkOut:"退勤"
+
+    }
+
+};
+
+/* ================= APPLY LANGUAGE ================= */
+
+function applyLanguage(){
+
+    const t = translations[lang];
+
+    document.getElementById("adminName")
+    .innerText =
+    t.welcome + user.name;
+
+    document.getElementById("panelTitle")
+    .innerText =
+    t.adminPanel;
+
+    document.getElementById("addStaffTitle")
+    .innerText =
+    t.addStaff;
+
+    document.getElementById("scheduleTitle")
+    .innerText =
+    t.createSchedule;
+
+    document.getElementById("attendanceTitle")
+    .innerText =
+    t.attendance;
+
+    document.getElementById("monthlyTitle")
+    .innerText =
+    t.monthlyHours;
+
+    document.getElementById("weeklyTitle")
+    .innerText =
+    t.weeklySchedule;
+
+    document.getElementById("pdfTitle")
+    .innerText =
+    t.monthlyPdf;
+
+    document.getElementById("deleteTitle")
+    .innerText =
+    t.deleteStaff;
+
+    document.getElementById("logoutBtn")
+    .innerText =
+    t.logout;
+
+    document.getElementById("staffName")
+    .placeholder =
+    t.staffName;
+
+    document.getElementById("staffPassword")
+    .placeholder =
+    t.password;
+
+    document.getElementById("reportMonth")
+    .placeholder =
+    t.monthNumber;
+
+    document.getElementById("startLabel")
+    .innerText =
+    t.startTime;
+
+    document.getElementById("endLabel")
+    .innerText =
+    t.endTime;
+
+    document.getElementById("addStaffBtn")
+    .innerText =
+    t.addStaff;
+
+    document.getElementById("scheduleBtn")
+    .innerText =
+    t.createSchedule;
+
+    document.getElementById("pdfBtn")
+    .innerText =
+    t.generatePdf;
+
+    document.getElementById("deleteBtn")
+    .innerText =
+    t.deleteStaff;
+
+    document.getElementById("staffHead")
+    .innerText =
+    t.staff;
+
+    document.getElementById("checkInHead")
+    .innerText =
+    t.checkIn;
+
+    document.getElementById("checkOutHead")
+    .innerText =
+    t.checkOut;
+
+    document.getElementById("minutesHead")
+    .innerText =
+    t.totalMinutes;
+
+    document.getElementById("staffHead2")
+    .innerText =
+    t.staff;
+
+    document.getElementById("totalHead")
+    .innerText =
+    t.totalTime;
+
+    document.getElementById("weekStaff")
+    .innerText =
+    t.staff;
+
+    document.getElementById("weekDate")
+    .innerText =
+    t.date;
+
+    document.getElementById("weekStart")
+    .innerText =
+    t.start;
+
+    document.getElementById("weekEnd")
+    .innerText =
+    t.end;
+
+    document.getElementById("weekEdit")
+    .innerText =
+    t.edit;
+
+}
+
+/* ================= ATTENDANCE ================= */
+
+async function loadAttendance(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/attendance"
+    );
+
+    const data =
+    await response.json();
+
+    let rows = "";
+
+    data.forEach(item => {
+
+        rows += `
+        <tr>
+
+        <td>${item.name}</td>
+
+        <td>
+        ${item.check_in
+        ? new Date(item.check_in)
+        .toLocaleString()
+        : ""}
+        </td>
+
+        <td>
+        ${item.check_out
+        ? new Date(item.check_out)
+        .toLocaleString()
+        : ""}
+        </td>
+
+        <td>
+        ${item.total_minutes || 0}
+        </td>
+
+        </tr>
+        `;
+
+    });
+
+    document.getElementById(
+    "attendanceTable"
+    ).innerHTML = rows;
+
+}
+
+/* ================= ADD STAFF ================= */
+
+async function addStaff(){
+
+    const name =
+    document.getElementById(
+    "staffName"
+    ).value;
+
+    const password =
+    document.getElementById(
+    "staffPassword"
+    ).value;
+
+    const role =
+    document.getElementById(
+    "staffRole"
+    ).value;
+
+    const response =
+    await fetch(
+    "http://localhost:3000/addstaff",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            name,
+            password,
+            role
+        })
+    });
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "staffMessage"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= CREATE SCHEDULE ================= */
+
+async function addSchedule(){
+
+    const staff_id =
+    document.getElementById(
+    "scheduleStaffId"
+    ).value;
+
+    const work_date =
+    document.getElementById(
+    "workDate"
+    ).value;
+
+    const start_time =
+    document.getElementById(
+    "startTime"
+    ).value;
+
+    const end_time =
+    document.getElementById(
+    "endTime"
+    ).value;
+
+    const response =
+    await fetch(
+    "http://localhost:3000/addschedules",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            staff_id,
+            work_date,
+            start_time,
+            end_time
+        })
+    });
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "scheduleMessage"
+    ).innerText =
+    data.message;
+
+}
+
+/* ================= MONTHLY HOURS ================= */
+
+async function loadMonthlyHours(){
+
+    const response =
+    await fetch(
+    "http://localhost:3000/monthlyhours"
+    );
+
+    const data =
+    await response.json();
+
+    let rows = "";
+
+    data.forEach(item => {
+
+        rows += `
+        <tr>
+
+        <td>${item.name}</td>
+
+        <td>${item.total_minutes || 0}</td>
+
+        </tr>
+        `;
+
+    });
+
+    document.getElementById(
+    "monthlyTable"
+    ).innerHTML = rows;
+
+}
+
+/* ================= STAFF DROPDOWN ================= */
+
+async function loadStaffDropdown(){
+
+    const res =
+    await fetch(
+    "http://localhost:3000/stafflist"
+    );
+
+    const data =
+    await res.json();
+
+    let options = "";
+
+    data.forEach(staff => {
+
+        options += `
+        <option value="${staff.id}">
+        ${staff.name}
+        </option>
+        `;
+
+    });
+
+    document.getElementById(
+    "scheduleStaffId"
+    ).innerHTML = options;
+
+    document.getElementById(
+    "reportStaff"
+    ).innerHTML = options;
+
+    document.getElementById(
+    "deleteStaff"
+    ).innerHTML = options;
+
+}
+
+/* ================= WEEK SCHEDULE ================= */
+
+async function loadWeekSchedule(){
+
+    const url =
+    user.role === "admin"
+    ? "http://localhost:3000/week-schedules?role=admin"
+    : `http://localhost:3000/week-schedules?role=staff&staff_id=${user.id}`;
+
+    const res =
+    await fetch(url);
+
+    const data =
+    await res.json();
+
+    let rows = "";
+
+    data.forEach(item => {
+
+        rows += `
+        <tr>
+
+        <td>${item.name}</td>
+
+        <td>${item.work_date}</td>
+
+        <td>
+
+        <input
+        type="time"
+        value="${item.start_time}"
+        onchange="updateSchedule(${item.id}, 'start_time', this.value)">
+
+        </td>
+
+        <td>
+
+        <input
+        type="time"
+        value="${item.end_time}"
+        onchange="updateSchedule(${item.id}, 'end_time', this.value)">
+
+        </td>
+
+        <td>
+
+        <button onclick="deleteSchedule(${item.id})">
+        Delete
+        </button>
+
+        </td>
+
+        </tr>
+        `;
+
+    });
+
+    document.getElementById(
+    "weekTable"
+    ).innerHTML = rows;
+
+}
+
+/* ================= UPDATE SCHEDULE ================= */
+
+async function updateSchedule(id, field, value){
+
+    await fetch(
+    "http://localhost:3000/update-schedule",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            id,
+            field,
+            value
+        })
+    });
+
+}
+
+/* ================= DELETE SCHEDULE ================= */
+
+async function deleteSchedule(id){
+
+    const res =
+    await fetch(
+    `http://localhost:3000/delete-schedule/${id}`,
+    {
+        method:"DELETE"
+    });
+
+    const data =
+    await res.json();
+
+    alert(data.message);
+
+    loadWeekSchedule();
+
+}
+
+/* ================= PDF ================= */
+
+function downloadReportDirect(){
+
+    const staffId =
+    document.getElementById(
+    "reportStaff"
+    ).value;
+
+    const month =
+    document.getElementById(
+    "reportMonth"
+    ).value;
+
+    window.open(
+    `http://localhost:3000/monthlyreport/${staffId}/${month}`,
+    "_blank"
+    );
+
+}
+
+/* ================= DELETE STAFF ================= */
+
+async function deleteStaff(){
+
+    const id =
+    document.getElementById(
+    "deleteStaff"
+    ).value;
+
+    const response =
+    await fetch(
+    `http://localhost:3000/deletestaff/${id}`,
+    {
+        method:"DELETE"
+    });
+
+    const data =
+    await response.json();
+
+    document.getElementById(
+    "deleteMessage"
+    ).innerText =
+    data.message;
+
+    loadStaffDropdown();
+
+}
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    localStorage.removeItem("user");
+
+    window.location.href =
+    "intex.html";
+
+}
+
+/* ================= LOAD ================= */
+
+applyLanguage();
+
+loadAttendance();
+
+loadMonthlyHours();
+
+loadStaffDropdown();
+
+loadWeekSchedule();
+
+setInterval(loadAttendance, 5000);
+
+</script>
+
+</body>
+</html>

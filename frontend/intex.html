@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>LUCE LANKA</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+
+<link rel="icon"
+href="image/logo1.png"
+type="image/png">
+</head>
+
+<body>
+
+<div class="login-container">
+
+<img
+src="image/logo.png"
+class="logo"
+alt="Restaurant Logo">
+
+<h1 class="share-tech-regular">
+LUCE LANKA
+</h1>
+
+<!-- LANGUAGE BUTTONS -->
+
+<div class="language-box">
+
+<button onclick="setLanguage('en')">
+English
+</button>
+
+<button onclick="setLanguage('jp')">
+日本語
+</button>
+
+</div>
+
+<!-- LOGIN -->
+
+<input
+type="text"
+id="name"
+placeholder="Name">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<button
+onclick="login()"
+id="loginBtn">
+Login
+</button>
+
+<p id="message"></p>
+
+</div>
+
+<script>
+
+/* ================= LANGUAGE ================= */
+
+function setLanguage(lang){
+
+    localStorage.setItem(
+    "language",
+    lang
+    );
+
+    applyLanguage();
+
+}
+
+/* ================= TRANSLATIONS ================= */
+
+const translations = {
+
+    en: {
+
+        name:"Name",
+        password:"Password",
+        login:"Login",
+        wrong:"Wrong Name or Password"
+
+    },
+
+    jp: {
+
+        name:"名前",
+        password:"パスワード",
+        login:"ログイン",
+        wrong:"名前またはパスワードが違います"
+
+    }
+
+};
+
+/* ================= APPLY LANGUAGE ================= */
+
+function applyLanguage(){
+
+    const lang =
+    localStorage.getItem("language") || "en";
+
+    const t =
+    translations[lang];
+
+    document.getElementById(
+    "name"
+    ).placeholder =
+    t.name;
+
+    document.getElementById(
+    "password"
+    ).placeholder =
+    t.password;
+
+    document.getElementById(
+    "loginBtn"
+    ).innerText =
+    t.login;
+
+}
+
+/* ================= LOGIN ================= */
+
+async function login(){
+
+    const name =
+    document.getElementById(
+    "name"
+    ).value;
+
+    const password =
+    document.getElementById(
+    "password"
+    ).value;
+
+    const response =
+    await fetch(
+    "http://localhost:3000/login",
+    {
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            name,
+            password
+        })
+    }
+    );
+
+    const data =
+    await response.json();
+
+    if(data.success){
+
+        localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+        );
+
+        if(data.user.role === "admin"){
+
+            window.location.href =
+            "admin.html";
+
+        }else{
+
+            window.location.href =
+            "staff.html";
+
+        }
+
+    }else{
+
+        const lang =
+        localStorage.getItem("language") || "en";
+
+        document.getElementById(
+        "message"
+        ).innerText =
+        translations[lang].wrong;
+
+    }
+
+}
+
+/* ================= RUN ================= */
+
+applyLanguage();
+
+</script>
+
+</body>
+</html>
