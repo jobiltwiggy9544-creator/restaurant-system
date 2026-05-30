@@ -524,7 +524,7 @@ async function loadAttendance(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/attendance"
+    "https://restaurant-backend-avva.onrender.com/attendance"
     );
 
     const data =
@@ -589,7 +589,7 @@ async function addStaff(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/addstaff",
+    "https://restaurant-backend-avva.onrender.com/addstaff",
     {
         method:"POST",
 
@@ -640,7 +640,7 @@ async function addSchedule(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/addschedules",
+    "https://restaurant-backend-avva.onrender.com/addschedules",
     {
         method:"POST",
 
@@ -672,7 +672,7 @@ async function loadMonthlyHours(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/monthlyhours"
+    "https://restaurant-backend-avva.onrender.com/monthlyhours"
     );
 
     const data =
@@ -706,7 +706,7 @@ async function loadStaffDropdown(){
 
     const res =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/stafflist"
+    "https://restaurant-backend-avva.onrender.com/stafflist"
     );
 
     const data =
@@ -744,8 +744,8 @@ async function loadWeekSchedule(){
 
     const url =
     user.role === "admin"
-    ? "http://restaurant-backend-avva.onrender.com/week-schedules?role=admin"
-    : `http://restaurant-backend-avva.onrender.com/week-schedules?role=staff&staff_id=${user.id}`;
+    ? "https://restaurant-backend-avva.onrender.com/week-schedules?role=admin"
+    : `https://restaurant-backend-avva.onrender.com/week-schedules?role=staff&staff_id=${user.id}`;
 
     const res =
     await fetch(url);
@@ -806,7 +806,7 @@ async function loadWeekSchedule(){
 async function updateSchedule(id, field, value){
 
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/update-schedule",
+    "https://restaurant-backend-avva.onrender.com/update-schedule",
     {
         method:"POST",
 
@@ -829,7 +829,7 @@ async function deleteSchedule(id){
 
     const res =
     await fetch(
-    `http://restaurant-backend-avva.onrender.com/delete-schedule/${id}`,
+    `https://restaurant-backend-avva.onrender.com/delete-schedule/${id}`,
     {
         method:"DELETE"
     });
@@ -858,7 +858,7 @@ function downloadReportDirect(){
     ).value;
 
     window.open(
-    `http://restaurant-backend-avva.onrender.com/monthlyreport/${staffId}/${month}`,
+    `https://restaurant-backend-avva.onrender.com/monthlyreport/${staffId}/${month}`,
     "_blank"
     );
 
@@ -875,7 +875,7 @@ async function deleteStaff(){
 
     const response =
     await fetch(
-    `http://restaurant-backend-avva.onrender.com/deletestaff/${id}`,
+    `https://restaurant-backend-avva.onrender.com/deletestaff/${id}`,
     {
         method:"DELETE"
     });

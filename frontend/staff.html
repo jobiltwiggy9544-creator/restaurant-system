@@ -135,7 +135,7 @@ async function checkIn(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/checkin",
+    "https://restaurant-backend-avva.onrender.com/checkin",
     {
         method:"POST",
 
@@ -165,7 +165,7 @@ async function breakIn(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/breakin",
+    "https://restaurant-backend-avva.onrender.com/breakin",
     {
         method:"POST",
 
@@ -195,7 +195,7 @@ async function breakOut(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/breakout",
+    "https://restaurant-backend-avva.onrender.com/breakout",
     {
         method:"POST",
 
@@ -225,7 +225,7 @@ async function checkOut(){
 
     const response =
     await fetch(
-    "http://restaurant-backend-avva.onrender.com/checkout",
+    "https://restaurant-backend-avva.onrender.com/checkout",
     {
         method:"POST",
 
@@ -266,7 +266,7 @@ async function loadWeekSchedule(){
 
     const res =
     await fetch(
-    `http://restaurant-backend-avva.onrender.com/week-schedules?role=staff&staff_id=${user.id}`
+    `https://restaurant-backend-avva.onrender.com/week-schedules?role=staff&staff_id=${user.id}`
     );
 
     const data =
