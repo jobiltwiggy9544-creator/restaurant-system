@@ -7,7 +7,7 @@ async function login() {
     document.getElementById("password").value;
 
     const response = await fetch(
-        "http://restaurant-backend-avva.onrender.com/login",
+        "https://restaurant-backend-avva.onrender.com/login",
         {
             method:"POST",
 
