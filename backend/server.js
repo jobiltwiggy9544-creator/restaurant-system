@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 
 const mysql = require("mysql2");
@@ -32,17 +34,7 @@ app.use("/", authRoutes);
 
 /* DATABASE */
 
-const db = mysql.createConnection({
-
-    host: "localhost",
-
-    user: "root",
-
-    password: "Jobil@9544",
-
-    database: "restaurant_system"
-
-});
+const db = require("./config/db");
 
 db.connect(err => {
 
