@@ -74,15 +74,15 @@ router.post("/checkin", (req, res) => {
         }
 
         const currentTime =
-new Date().toLocaleTimeString(
-"en-GB",
-{
-    timeZone: "Asia/Tokyo",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-}
-);
+        new Date().toLocaleTimeString(
+            "en-GB",
+            {
+                timeZone: "Asia/Tokyo",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+            }
+        );
 
         const startTime =
         result[0].start_time.slice(0,5);
@@ -99,12 +99,12 @@ new Date().toLocaleTimeString(
         const startMinutes =
         sH * 60 + sM;
 
-        /* allow 30 min early */
-
         console.log("Current Time:", currentTime);
-console.log("Start Time:", startTime);
-console.log("Current Minutes:", currentMinutes);
-console.log("Start Minutes:", startMinutes);
+        console.log("Start Time:", startTime);
+        console.log("Current Minutes:", currentMinutes);
+        console.log("Start Minutes:", startMinutes);
+
+        /* Allow 30 minutes early */
 
         if(currentMinutes < startMinutes - 30){
 
@@ -121,27 +121,31 @@ console.log("Start Minutes:", startMinutes);
         VALUES (?, NOW())
         `;
 
-      db.query(
-    insertSql,
-    [staff_id],
-    (err, result) => {
-
-        if(err){
-            return res.json(err);
-        }
-
         db.query(
-            "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
-            [staff_id, "Check In"]
+            insertSql,
+            [staff_id],
+            (err, result) => {
+
+                if(err){
+                    return res.json(err);
+                }
+
+                db.query(
+                    "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
+                    [staff_id, "Check In"]
+                );
+
+                res.json({
+                    success:true,
+                    message:"Checked In"
+                });
+
+            }
         );
 
-        res.json({
-            success:true,
-            message:"Checked In"
-        });
+    });
 
-    }
-);  
+});
 
 /* ================= BREAK IN ================= */
 
@@ -431,8 +435,6 @@ router.post("/addschedules", (req, res) => {
     );
 
 });
-
-/* ================= WEEK SCHEDULE ================= */
 
 /* ================= WEEK SCHEDULE ================= */
 
