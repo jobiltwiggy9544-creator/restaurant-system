@@ -682,4 +682,31 @@ router.delete(
     });
 
 });
+/* ================= ACTIVITY LOG ================= */
+
+router.get("/activitylog", (req, res) => {
+
+    const sql = `
+    SELECT
+    activity_log.id,
+    staff.name,
+    activity_log.action,
+    activity_log.action_time
+    FROM activity_log
+    JOIN staff
+    ON activity_log.staff_id = staff.id
+    ORDER BY activity_log.action_time DESC
+    `;
+
+    db.query(sql, (err, result) => {
+
+        if(err){
+            return res.json(err);
+        }
+
+        res.json(result);
+
+    });
+
+});
 module.exports = router;
