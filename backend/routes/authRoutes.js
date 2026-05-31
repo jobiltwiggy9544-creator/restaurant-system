@@ -95,6 +95,11 @@ router.post("/checkin", (req, res) => {
 
         /* allow 30 min early */
 
+        console.log("Current Time:", currentTime);
+console.log("Start Time:", startTime);
+console.log("Current Minutes:", currentMinutes);
+console.log("Start Minutes:", startMinutes);
+
         if(currentMinutes < startMinutes - 30){
 
             return res.json({
