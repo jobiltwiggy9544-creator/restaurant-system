@@ -8,6 +8,8 @@ const cors = require("cors");
 
 const path = require("path");
 
+const cron = require("node-cron");
+
 const authRoutes =
 require("./routes/authRoutes");
 
@@ -52,6 +54,26 @@ db.connect(err => {
         console.log("MySQL Connected");
 
     }
+
+});
+
+/* DELETE OLD ACTIVITY LOGS DAILY */
+
+cron.schedule("0 0 * * *", () => {
+
+    db.query(
+        `DELETE FROM activity_log
+         WHERE action_time < NOW() - INTERVAL 1 DAY`,
+        (err) => {
+
+            if(err){
+                console.log(err);
+            }else{
+                console.log("Old activity logs deleted");
+            }
+
+        }
+    );
 
 });
 
