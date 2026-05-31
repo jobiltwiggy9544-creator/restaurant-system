@@ -73,10 +73,16 @@ router.post("/checkin", (req, res) => {
 
         }
 
-        const now = new Date();
-
         const currentTime =
-        now.toTimeString().slice(0,5);
+new Date().toLocaleTimeString(
+"en-GB",
+{
+    timeZone: "Asia/Tokyo",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+}
+);
 
         const startTime =
         result[0].start_time.slice(0,5);
