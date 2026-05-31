@@ -13,6 +13,11 @@ require("./routes/authRoutes");
 
 const app = express();
 
+/* ROOT ROUTE FOR UPTIMEROBOT */
+app.get("/", (req, res) => {
+    res.status(200).send("Backend is running");
+});
+
 /* MIDDLEWARE */
 
 app.use(cors());
@@ -212,10 +217,8 @@ app.delete(
 
 /* START SERVER */
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
 
-    console.log(
-    "Server running on port 3000"
-    );
-
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
