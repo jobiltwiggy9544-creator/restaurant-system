@@ -686,27 +686,23 @@ router.delete(
 
 router.get("/activitylog", (req, res) => {
 
-    const sql = `
-    SELECT
-    activity_log.id,
-    staff.name,
-    activity_log.action,
-    activity_log.action_time
-    FROM activity_log
-    JOIN staff
-    ON activity_log.staff_id = staff.id
-    ORDER BY activity_log.action_time DESC
-    `;
+    db.query(
+        `SELECT activity_log.*, staff.name
+         FROM activity_log
+         JOIN staff
+         ON activity_log.staff_id = staff.id
+         WHERE DATE(action_time) = CURDATE()
+         ORDER BY action_time DESC`,
+        (err, result) => {
 
-    db.query(sql, (err, result) => {
+            if(err){
+                return res.json(err);
+            }
 
-        if(err){
-            return res.json(err);
+            res.json(result);
+
         }
-
-        res.json(result);
-
-    });
+    );
 
 });
 module.exports = router;
