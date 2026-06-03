@@ -49,104 +49,39 @@ router.post("/login", (req, res) => {
 
 router.post("/checkin", (req, res) => {
 
-    const { staff_id } = req.body;
+```
+const { staff_id } = req.body;
 
-    const sql = `
-    SELECT *
-    FROM schedules
-    WHERE staff_id = ?
-    AND work_date = CURDATE()
-    `;
+const insertSql = `
+INSERT INTO attendance
+(staff_id, check_in)
+VALUES (?, NOW())
+`;
 
-    db.query(sql, [staff_id], (err, result) => {
+db.query(
+    insertSql,
+    [staff_id],
+    (err, result) => {
 
         if(err){
             return res.json(err);
         }
 
-        if(result.length === 0){
-
-            return res.json({
-                success:false,
-                message:"No Schedule Today"
-            });
-
-        }
-
-        const currentTime =
-        new Date().toLocaleTimeString(
-            "en-GB",
-            {
-                timeZone: "Asia/Tokyo",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false
-            }
-        );
-
-        const startTime =
-        result[0].start_time.slice(0,5);
-
-        const [cH, cM] =
-        currentTime.split(":").map(Number);
-
-        const [sH, sM] =
-        startTime.split(":").map(Number);
-
-        const currentMinutes =
-        cH * 60 + cM;
-
-        const startMinutes =
-        sH * 60 + sM;
-
-        console.log("Current Time:", currentTime);
-        console.log("Start Time:", startTime);
-        console.log("Current Minutes:", currentMinutes);
-        console.log("Start Minutes:", startMinutes);
-
-        /* Allow 30 minutes early */
-
-        if(currentMinutes < startMinutes - 30){
-
-            return res.json({
-                success:false,
-                message:"Too Early For Check In"
-            });
-
-        }
-
-        const insertSql = `
-        INSERT INTO attendance
-        (staff_id, check_in)
-        VALUES (?, NOW())
-        `;
-
         db.query(
-            insertSql,
-            [staff_id],
-            (err, result) => {
-
-                if(err){
-                    return res.json(err);
-                }
-
-                db.query(
-                    "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
-                    [staff_id, "Check In"]
-                );
-
-                res.json({
-                    success:true,
-                    message:"Checked In"
-                });
-
-            }
+            "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
+            [staff_id, "Check In"]
         );
 
-    });
+        res.json({
+            success:true,
+            message:"Checked In"
+        });
+
+    }
+);
+```
 
 });
-
 /* ================= BREAK IN ================= */
 
 router.post("/breakin", (req, res) => {
