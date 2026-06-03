@@ -56,7 +56,6 @@ const insertSql = `
 INSERT INTO attendance
 (staff_id, check_in)
 VALUES (?, NOW())
-`;
 
 db.query(
     insertSql,
@@ -79,7 +78,7 @@ db.query(
 
     }
 );
-```
+
 
 });
 /* ================= BREAK IN ================= */
