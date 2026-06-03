@@ -49,39 +49,38 @@ router.post("/login", (req, res) => {
 
 router.post("/checkin", (req, res) => {
 
-```
-const { staff_id } = req.body;
+    const { staff_id } = req.body;
 
-const insertSql = `
-INSERT INTO attendance
-(staff_id, check_in)
-VALUES (?, NOW())
-`;
+    const insertSql = `
+    INSERT INTO attendance
+    (staff_id, check_in)
+    VALUES (?, NOW())
+    `;
 
-db.query(
-    insertSql,
-    [staff_id],
-    (err, result) => {
+    db.query(
+        insertSql,
+        [staff_id],
+        (err, result) => {
 
-        if(err){
-            return res.json(err);
+            if(err){
+                return res.json(err);
+            }
+
+            db.query(
+                "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
+                [staff_id, "Check In"]
+            );
+
+            res.json({
+                success:true,
+                message:"Checked In"
+            });
+
         }
-
-        db.query(
-            "INSERT INTO activity_log (staff_id, action) VALUES (?, ?)",
-            [staff_id, "Check In"]
-        );
-
-        res.json({
-            success:true,
-            message:"Checked In"
-        });
-
-    }
-);
-
+    );
 
 });
+
 /* ================= BREAK IN ================= */
 
 router.post("/breakin", (req, res) => {
