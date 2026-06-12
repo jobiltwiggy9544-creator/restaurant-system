@@ -620,23 +620,49 @@ router.delete(
 
 router.get("/activitylog", (req, res) => {
 
-    db.query(
-        `SELECT activity_log.*, staff.name
-         FROM activity_log
-         JOIN staff
-         ON activity_log.staff_id = staff.id
-         WHERE DATE(action_time) = CURDATE()
-         ORDER BY action_time DESC`,
-        (err, result) => {
+db.query(
+    `SELECT activity_log.*, staff.name
+     FROM activity_log
+     JOIN staff
+     ON activity_log.staff_id = staff.id
+     WHERE DATE(action_time) = CURDATE()
+     ORDER BY action_time DESC`,
+    (err, result) => {
 
-            if(err){
-                return res.json(err);
-            }
-
-            res.json(result);
-
+        if(err){
+            return res.json(err);
         }
-    );
+
+        res.json(result);
+
+    }
+);
 
 });
+
+/* ================= UPDATE HOURS ================= */
+
+router.post("/updatehours", (req, res) => {
+
+const { id, total_minutes } = req.body;
+
+db.query(
+    "UPDATE attendance SET total_minutes = ? WHERE id = ?",
+    [total_minutes, id],
+    (err, result) => {
+
+        if(err){
+            return res.json(err);
+        }
+
+        res.json({
+            success:true,
+            message:"Hours Updated"
+        });
+
+    }
+);
+
+});
+
 module.exports = router;

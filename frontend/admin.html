@@ -156,43 +156,48 @@ type="image/png">
 
     <!-- RIGHT PANEL -->
     <div class="right-panel">
+            <!-- ATTENDANCE -->
 
-        <!-- ATTENDANCE -->
-        <div class="table-container">
+<div class="table-container">
+<h2 id="attendanceTitle">
+Attendance
+</h2>
 
-            <h2 id="attendanceTitle">
-            Attendance
-            </h2>
+<table>
 
-            <table>
+    <thead>
 
-                <thead>
+        <tr>
 
-                    <tr>
-                        <th id="staffHead">
-                        Staff
-                        </th>
+            <th id="staffHead">
+            Staff
+            </th>
 
-                        <th id="checkInHead">
-                        Check In
-                        </th>
+            <th id="checkInHead">
+            Check In
+            </th>
 
-                        <th id="checkOutHead">
-                        Check Out
-                        </th>
+            <th id="checkOutHead">
+            Check Out
+            </th>
 
-                        <th id="minutesHead">
-                        Total Minutes
-                        </th>
-                    </tr>
+            <th id="minutesHead">
+            Total Minutes
+            </th>
 
-                </thead>
+            <th>
+            Actions
+            </th>
 
-                <tbody id="attendanceTable"></tbody>
+        </tr>
 
-            </table>
+    </thead>
 
-        </div>
+    <tbody id="attendanceTable"></tbody>
+
+</table>
+
+</div>
 
         <!-- MONTHLY HOURS -->
         <div class="table-container">
@@ -529,39 +534,36 @@ function applyLanguage(){
     t.edit;
 
 }
-
 /* ================= ATTENDANCE ================= */
 
 async function loadAttendance(){
 
-    const response =
-    await fetch(
-    "https://restaurant-backend-avva.onrender.com/attendance"
-    );
+const response =
+await fetch(
+"https://restaurant-backend-avva.onrender.com/attendance"
+);
 
-    const data =
-    await response.json();
+const data =
+await response.json();
 
-    let rows = "";
+let rows = "";
 
-    data.forEach(item => {
+data.forEach(item => {
 
-        rows += `
-        <tr>
+    rows += `
+    <tr>
 
         <td>${item.name}</td>
 
         <td>
         ${item.check_in
-        ? new Date(item.check_in)
-        .toLocaleString()
+        ? new Date(item.check_in).toLocaleString()
         : ""}
         </td>
 
         <td>
         ${item.check_out
-        ? new Date(item.check_out)
-        .toLocaleString()
+        ? new Date(item.check_out).toLocaleString()
         : ""}
         </td>
 
@@ -569,14 +571,51 @@ async function loadAttendance(){
         ${item.total_minutes || 0}
         </td>
 
-        </tr>
-        `;
+        <td>
+        <button onclick="editHours(${item.id})">
+        Edit Hours
+        </button>
+        </td>
 
-    });
+    </tr>
+    `;
 
-    document.getElementById(
-    "attendanceTable"
-    ).innerHTML = rows;
+});
+
+document.getElementById(
+"attendanceTable"
+).innerHTML = rows;
+
+
+}
+
+
+async function editHours(id){
+
+    const minutes =
+    prompt("Enter total minutes:");
+
+    if(!minutes) return;
+
+    const response = await fetch(
+        "https://restaurant-backend-avva.onrender.com/updatehours",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                id:id,
+                total_minutes:minutes
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    alert(data.message);
+
+    loadAttendance();
 
 }
 
