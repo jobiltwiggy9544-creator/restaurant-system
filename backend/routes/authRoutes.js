@@ -232,6 +232,7 @@ router.get("/attendance", (req, res) => {
     JOIN staff
     ON attendance.staff_id = staff.id
     ORDER BY attendance.id DESC
+    LIMIT 10
     `;
 
     db.query(sql, (err, result) => {
@@ -626,7 +627,8 @@ db.query(
      JOIN staff
      ON activity_log.staff_id = staff.id
      WHERE DATE(action_time) = CURDATE()
-     ORDER BY action_time DESC`,
+     ORDER BY action_time DESC
+LIMIT 10`,
     (err, result) => {
 
         if(err){
